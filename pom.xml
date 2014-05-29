@@ -7,6 +7,10 @@
 	<name>Plugin For Unit Testing Bukkit PRs</name>
 	<url>http://mine.elmakers.com</url>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.bukkit</groupId>
