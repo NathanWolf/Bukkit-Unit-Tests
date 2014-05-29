@@ -1,7 +1,7 @@
-name: Test-ItemMetaData
+name: Test-Fix-BUKKIT-3868
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Bukkit PRs
+description : A plugin to unit test BUKKIT-3868
 commands:
