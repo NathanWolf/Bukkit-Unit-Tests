@@ -8,9 +8,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -21,9 +19,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.BlockIterator;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UnitTestPlugin extends JavaPlugin implements Listener
 {
@@ -53,7 +49,7 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        sendMessage(player, "Swing a stick or blaze rod to test " + ChatColor.GOLD + "Location.getNearbyEntities");
+        sendMessage(player, "Swing a special item to test " + ChatColor.GOLD + "Location.getNearbyEntities");
         PlayerInventory inventory = player.getInventory();
         if (!inventory.contains(Material.STICK)) {
             sendMessage(player, " A stick will check within 8 blocks of your target");
@@ -62,6 +58,14 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
         if (!inventory.contains(Material.BLAZE_ROD)) {
             sendMessage(player, " A blaze rod will check within 64 blocks of your target");
             inventory.addItem(new ItemStack(Material.BLAZE_ROD, 1));
+        }
+        if (!inventory.contains(Material.WOOD_SWORD)) {
+            sendMessage(player, " A wood sword will check for LivingEntity classes only");
+            inventory.addItem(new ItemStack(Material.WOOD_SWORD, 1));
+        }
+        if (!inventory.contains(Material.WOOD_HOE)) {
+            sendMessage(player, " A wood hoe will check for Item and Player classes only");
+            inventory.addItem(new ItemStack(Material.WOOD_HOE, 1));
         }
     }
 
@@ -72,7 +76,8 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
         if (inHand == null) {
             return;
         }
-        if (inHand.getType() != Material.STICK && inHand.getType() != Material.BLAZE_ROD) {
+        if (inHand.getType() != Material.STICK && inHand.getType() != Material.BLAZE_ROD
+         && inHand.getType() != Material.WOOD_SWORD && inHand.getType() != Material.WOOD_HOE) {
             return;
         }
 
@@ -95,7 +100,18 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
             world.playEffect(targetBlock.getRelative(BlockFace.UP).getLocation(), Effect.ENDER_SIGNAL, 0);
 
             Location target = targetBlock.getLocation();
-            List<Entity> entities = target.getNearbyEntities(range, range, range);
+            Collection<Entity> entities = null;
+
+            if (inHand.getType() == Material.WOOD_SWORD) {
+                entities = new ArrayList<Entity>();
+                Collection<LivingEntity> li = world.getEntitiesByClass(target, range, range, range, LivingEntity.class);
+                entities.addAll(li);
+            } else if (inHand.getType() == Material.WOOD_HOE) {
+                entities = world.getEntitiesByClasses(target, range, range, range, Player.class, Item.class);
+            } else {
+                entities = target.getNearbyEntities(range, range, range);
+            }
+
             Map<EntityType, Integer> entityCounts = new HashMap<EntityType, Integer>();
 
             for (Entity entity : entities) {
