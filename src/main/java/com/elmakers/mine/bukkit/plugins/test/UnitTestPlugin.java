@@ -59,14 +59,6 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
             sendMessage(player, " A blaze rod will check within 64 blocks of your target");
             inventory.addItem(new ItemStack(Material.BLAZE_ROD, 1));
         }
-        if (!inventory.contains(Material.WOOD_SWORD)) {
-            sendMessage(player, " A wood sword will check for LivingEntity classes only");
-            inventory.addItem(new ItemStack(Material.WOOD_SWORD, 1));
-        }
-        if (!inventory.contains(Material.WOOD_HOE)) {
-            sendMessage(player, " A wood hoe will check for Item and Player classes only");
-            inventory.addItem(new ItemStack(Material.WOOD_HOE, 1));
-        }
     }
 
     @EventHandler
@@ -76,8 +68,7 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
         if (inHand == null) {
             return;
         }
-        if (inHand.getType() != Material.STICK && inHand.getType() != Material.BLAZE_ROD
-         && inHand.getType() != Material.WOOD_SWORD && inHand.getType() != Material.WOOD_HOE) {
+        if (inHand.getType() != Material.STICK && inHand.getType() != Material.BLAZE_ROD) {
             return;
         }
 
@@ -100,18 +91,7 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
             world.playEffect(targetBlock.getRelative(BlockFace.UP).getLocation(), Effect.ENDER_SIGNAL, 0);
 
             Location target = targetBlock.getLocation();
-            Collection<Entity> entities = null;
-
-            if (inHand.getType() == Material.WOOD_SWORD) {
-                entities = new ArrayList<Entity>();
-                Collection<LivingEntity> li = world.getEntitiesByClass(target, range, range, range, LivingEntity.class);
-                entities.addAll(li);
-            } else if (inHand.getType() == Material.WOOD_HOE) {
-                entities = world.getEntitiesByClasses(target, range, range, range, Player.class, Item.class);
-            } else {
-                entities = target.getNearbyEntities(range, range, range);
-            }
-
+            Collection<Entity> entities = target.getNearbyEntities(range, range, range);
             Map<EntityType, Integer> entityCounts = new HashMap<EntityType, Integer>();
 
             for (Entity entity : entities) {
