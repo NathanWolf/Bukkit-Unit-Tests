@@ -5,3 +5,28 @@ website: http://mine.elmakers.com
 author: NathanWolf
 description : A plugin to unit test Bukkit PRs
 commands:
+commands:
+  invpush:
+    description: Save your current inventory
+    usage: /invpush
+  invpop:
+    description: Return your current inventory
+    usage: /invpop
+  itemsave:
+    description: Save an item to memory as a string
+    usage: /itemsave
+  itemload:
+    description: Create a new item from the saved string
+    usage: /itemload
+  itemunenchant:
+    description: Remove all enchants from held item
+    usage: /itemunenchant
+  itemcheck:
+    description: Check the held item for glow and enchants
+    usage: /itemcheck
+  itemclone:
+    description: Spawn a copy of the item in your hand
+    usage: /itemclone
+  itemdump:
+    description: Print YAML of stored item
+    usage: /itemdump
