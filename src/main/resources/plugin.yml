@@ -1,4 +1,4 @@
-name: Test-ItemMetaData
+name: Test-InteractEvents
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
