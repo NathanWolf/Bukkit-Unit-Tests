@@ -1,7 +1,10 @@
-name: Test-InteractEvents
+name: TestKits
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
 description : A plugin to unit test Bukkit PRs
 commands:
+  givekit:
+    description: Give yourself a kit
+    usage: givekit <kitname>
