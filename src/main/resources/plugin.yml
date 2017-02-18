@@ -1,7 +1,16 @@
-name: Test-ItemMetaData
+name: Test-SPIGOT-974
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Bukkit PRs
+description : A plugin to unit test the ArmorStand disabled slots API
 commands:
+  lockslot:
+    description: Lock an armor stand slot
+    usage: lockslot <slot>
+  unlockslot:
+    description: Unlock an armor stand slot
+    usage: unlockslot <slot>
+  spawnstand:
+    description: Spawn an armor stand with arms
+    usage: spawnstand
