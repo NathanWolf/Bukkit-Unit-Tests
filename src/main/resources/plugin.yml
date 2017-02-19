@@ -5,12 +5,17 @@ website: http://mine.elmakers.com
 author: NathanWolf
 description : A plugin to unit test the ArmorStand disabled slots API
 commands:
-  lockslot:
-    description: Lock an armor stand slot
-    usage: lockslot <slot>
-  unlockslot:
-    description: Unlock an armor stand slot
-    usage: unlockslot <slot>
+  setslot:
+    description: Configure an armor stand slot
+    usage: |
+        Use tab completion if you get lost
+        /setslot <slot> <action> <disabled|enabled>
+        /setslot hand remove disabled
+        /setslot off_hand replace enabled
+        /setslot feet place enabled
+        /setslot legs replace enabled
+        /setslot chest place disabled
+        /setslot head place enabled
   spawnstand:
     description: Spawn an armor stand with arms
     usage: spawnstand

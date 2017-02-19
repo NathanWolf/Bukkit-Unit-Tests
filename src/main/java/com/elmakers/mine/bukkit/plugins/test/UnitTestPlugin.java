@@ -10,12 +10,14 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class UnitTestPlugin extends JavaPlugin implements CommandExecutor, TabExecutor
@@ -23,13 +25,22 @@ public class UnitTestPlugin extends JavaPlugin implements CommandExecutor, TabEx
     private static final ChatColor CHAT_PREFIX = ChatColor.AQUA;
     private static final ChatColor ERROR_PREFIX = ChatColor.RED;
 
+    private enum SlotAction {
+        REMOVE,
+        REPLACE,
+        PLACE
+    };
+
+    private enum SlotState {
+        ENABLED,
+        DISABLED
+    };
+
     public void onEnable()
 	{
-        getCommand("lockslot").setExecutor(this);
-        getCommand("unlockslot").setExecutor(this);
+        getCommand("setslot").setExecutor(this);
         getCommand("spawnstand").setExecutor(this);
-        getCommand("lockslot").setTabCompleter(this);
-        getCommand("unlockslot").setTabCompleter(this);
+        getCommand("setslot").setTabCompleter(this);
 	}
 
 	public void onDisable()
@@ -50,6 +61,10 @@ public class UnitTestPlugin extends JavaPlugin implements CommandExecutor, TabEx
                 ((ArmorStand)newArmorStand).setArms(true);
             }
             return true;
+        }
+
+        if (args.length < 3) {
+            return false;
         }
 
         ArmorStand armorStand = null;
@@ -73,39 +88,58 @@ public class UnitTestPlugin extends JavaPlugin implements CommandExecutor, TabEx
             return true;
         }
 
-        if (args.length < 1) {
-            EnumSet<ArmorStand.Slot> allSlots = EnumSet.allOf(ArmorStand.Slot.class);
-            if (command.getName().equals("lockslot")) {
-                armorStand.setLocked(allSlots, true);
-                sendMessage(sender, "Locked all slots");
-            } else if (command.getName().equals("unlockslot")) {
-                armorStand.setLocked(allSlots, false);
-                sendMessage(sender, "Unlocked all slots");
-            }
-            return true;
-        }
-
-        ArmorStand.Slot slot;
+        EquipmentSlot slot;
+        SlotAction action;
+        SlotState state;
         try {
-            slot = ArmorStand.Slot.valueOf(args[0].toUpperCase());
+            slot = EquipmentSlot.valueOf(args[0].toUpperCase());
         } catch (Exception ex) {
             sendError(sender, args[0] + " is not a valid slot name. Try tab completion!");
             return true;
         }
-        if (command.getName().equals("lockslot")) {
-            if (armorStand.isLocked(slot)) {
-                sendError(sender, "That slot is already locked");
-            } else {
-                armorStand.setLocked(slot, true);
-                sendMessage(sender, "Locked the slot");
-            }
-        } else if (command.getName().equals("unlockslot")) {
-            if (!armorStand.isLocked(slot)) {
-                sendError(sender, "That slot was not locked");
-            } else {
-                armorStand.setLocked(slot, false);
-                sendMessage(sender, "Unlocked the slot");
-            }
+        try {
+            action = SlotAction.valueOf(args[1].toUpperCase());
+        } catch (Exception ex) {
+            sendError(sender, args[1] + " is not a valid action. Try tab completion!");
+            return true;
+        }
+        try {
+            state = SlotState.valueOf(args[2].toUpperCase());
+        } catch (Exception ex) {
+            sendError(sender, args[2] + " is not a valid state. Try tab completion!");
+            return true;
+        }
+
+        boolean isDisable = (state == SlotState.DISABLED);
+        String stateDescription = state.name().toLowerCase();
+        String slotDescription = slot.name().toLowerCase();
+        String actionDescription = action.name().toLowerCase();
+
+        boolean success = false;
+        switch (action) {
+            case REPLACE:
+                if (armorStand.isReplaceDisabled(slot) != isDisable) {
+                    success = true;
+                    armorStand.setReplaceDisabled(slot, isDisable);
+                }
+                break;
+            case PLACE:
+                if (armorStand.isPlaceDisabled(slot) != isDisable) {
+                    success = true;
+                    armorStand.setPlaceDisabled(slot, isDisable);
+                }
+                break;
+            case REMOVE:
+                if (armorStand.isRemoveDisabled(slot) != isDisable) {
+                    success = true;
+                    armorStand.setRemoveDisabled(slot, isDisable);
+                }
+                break;
+        }
+        if (success) {
+            sendMessage(sender, "The " + slotDescription + " slot now has " + actionDescription + " " + stateDescription);
+        } else {
+            sendError(sender, "The " + slotDescription + " slot already has " + actionDescription + " " + stateDescription);
         }
 
         return true;
@@ -113,15 +147,35 @@ public class UnitTestPlugin extends JavaPlugin implements CommandExecutor, TabEx
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> options = new ArrayList<String>();
-        String completeCommand = args.length > 0 ? args[args.length - 1] : "";
-        completeCommand = completeCommand.toLowerCase();
-        for (ArmorStand.Slot slot : ArmorStand.Slot.values()) {
-            String slotName = slot.name().toLowerCase();
-            if (slotName.startsWith(completeCommand)) {
-                options.add(slotName);
+        List<String> options = new LinkedList<String>();
+        String partialParameter = args.length > 0 ? args[args.length - 1] : "";
+        partialParameter = partialParameter.toLowerCase();
+
+        if (args.length > 2) {
+            // On enabled/disabled
+            for (SlotState state : SlotState.values()) {
+                options.add(state.name().toLowerCase());
+            }
+        } else if (args.length > 1) {
+            // On action
+            for (SlotAction action : SlotAction.values()) {
+                options.add(action.name().toLowerCase());
+            }
+        } else {
+            // On slot
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                options.add(slot.name().toLowerCase());
             }
         }
+
+        Iterator<String> filterOptions = options.iterator();
+        while (filterOptions.hasNext()) {
+            String option = filterOptions.next();
+            if (!option.toLowerCase().startsWith(partialParameter)) {
+                filterOptions.remove();
+            }
+        }
+        Collections.sort(options);
         return options;
     }
 
