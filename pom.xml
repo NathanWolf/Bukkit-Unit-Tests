@@ -18,12 +18,25 @@
 			<version>1.7.9-R0.2-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.elmakers.mine.bukkit</groupId>
+			<artifactId>MagicAPI</artifactId>
+			<version>7.0-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 	<repositories>
        		<repository>
             		<id>bukkit-repo</id>
             		<url>http://repo.bukkit.org/content/groups/public/</url>
       		</repository>
+
+			<repository>
+				<id>elMakers</id>
+				<url>http://maven.elmakers.com/repository/</url>
+			</repository>
+
 	</repositories>
 	<build>
 		<plugins>
