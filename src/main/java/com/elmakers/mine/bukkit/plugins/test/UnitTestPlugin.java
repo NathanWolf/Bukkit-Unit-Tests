@@ -1,5 +1,6 @@
 package com.elmakers.mine.bukkit.plugins.test;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
@@ -15,6 +16,13 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
 	{
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(this, this);
+
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+		    @Override
+            public void run() {
+		        Bukkit.getLogger().info("Tick# " + Bukkit.getWorlds().get(0).getFullTime());
+            }
+        }, 1, 1);
 	}
 
 	public void onDisable()
