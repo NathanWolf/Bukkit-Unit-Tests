@@ -1,12 +1,13 @@
 package com.elmakers.mine.bukkit.plugins.test;
 
+import com.elmakers.mine.bukkit.api.event.LoadEvent;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class UnitTestPlugin extends JavaPlugin implements Listener
+public class MagicAttributesPlugin extends JavaPlugin implements Listener
 {
     private static final ChatColor CHAT_PREFIX = ChatColor.AQUA;
     private static final ChatColor ERROR_PREFIX = ChatColor.RED;
@@ -21,13 +22,8 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
     {
     }
 
-    protected void sendMessage(CommandSender sender, String string)
-    {
-        sender.sendMessage(CHAT_PREFIX + string);
-    }
-
-    protected void sendError(CommandSender sender, String string)
-    {
-        sender.sendMessage(ERROR_PREFIX + string);
+    @EventHandler
+    public void onMagicLoad(LoadEvent event) {
+        event.getAttributeProviders().add(new TestProvider(this));
     }
 }

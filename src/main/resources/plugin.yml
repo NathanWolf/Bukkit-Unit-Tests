@@ -1,7 +1,8 @@
-name: Test-ItemMetaData
-main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
+name: MagicAttributes
+main: com.elmakers.mine.bukkit.plugins.test.MagicAttributesPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Bukkit PRs
-commands:
+description : A plugin to unit test Magic Attributes
+depend: [Magic]
+loadbefore: [Magic]
