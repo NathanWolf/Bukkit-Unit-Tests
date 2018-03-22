@@ -5,4 +5,3 @@ website: http://mine.elmakers.com
 author: NathanWolf
 description : A plugin to unit test Magic Attributes
 depend: [Magic]
-loadbefore: [Magic]

@@ -9,9 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MagicAttributesPlugin extends JavaPlugin implements Listener
 {
-    private static final ChatColor CHAT_PREFIX = ChatColor.AQUA;
-    private static final ChatColor ERROR_PREFIX = ChatColor.RED;
-
     public void onEnable()
 	{
 		PluginManager pm = getServer().getPluginManager();

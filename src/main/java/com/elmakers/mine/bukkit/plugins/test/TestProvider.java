@@ -19,6 +19,7 @@ public class TestProvider implements AttributeProvider {
         Set<String> attributes = new HashSet<>();
         attributes.add("intelligence");
         attributes.add("strength");
+        attributes.add("power");
 
         plugin.getLogger().info("Registered attributes: " + attributes);
         return attributes;
@@ -27,6 +28,6 @@ public class TestProvider implements AttributeProvider {
     @Override
     public Double getAttributeValue(String attribute, Player player) {
         plugin.getLogger().info("Requesting attribute: " + attribute);
-        return 0.0;
+        return 20.0;
     }
 }
