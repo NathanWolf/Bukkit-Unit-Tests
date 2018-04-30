@@ -100,8 +100,9 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
         player.sendMessage(ChatColor.AQUA + "shot from   " +
             printVector(player.getLocation().getDirection()));
         player.sendMessage(ChatColor.AQUA + " hit facing " +
-            printVector(projectile.getLocation().getDirection())
-        );
+            printVector(projectile.getLocation().getDirection()));
+        player.sendMessage(ChatColor.AQUA + " at speed   " +
+            printVector(projectile.getVelocity().normalize()));
     }
 
 
