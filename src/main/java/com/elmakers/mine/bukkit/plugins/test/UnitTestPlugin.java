@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,14 +54,8 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
             MapView newMap = Bukkit.createMap(Bukkit.getWorlds().get(0));
             sendMessage(sender, "Created map id " + newMap.getId());
 
-            ItemStack newMapItem = new ItemStack(Material.FILLED_MAP);
-
-            // Yeah this is hacky, replace with MapMeta.setId when available.
-            net.minecraft.server.v1_13_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(newMapItem);
-            nmsStack.getOrCreateTag().setInt("map", newMap.getId());
-            CraftItemStack craftStack = CraftItemStack.asCraftMirror(nmsStack);
-
-            player.getInventory().addItem(craftStack);
+            ItemStack newMapItem = new ItemStack(Material.MAP, 1, newMap.getId());
+            player.getInventory().addItem(newMapItem);
 
             sendMessage(sender, "Now please use /save-all and check world/data to see if the data file is there (it should be)");
         }

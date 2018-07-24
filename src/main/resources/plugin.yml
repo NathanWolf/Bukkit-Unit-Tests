@@ -3,8 +3,7 @@ main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Maps in 1.13
-api-version: 1.13
+description : A plugin to unit test Maps in 1.12
 commands:
   givemap:
     description: Give yourself a new map
