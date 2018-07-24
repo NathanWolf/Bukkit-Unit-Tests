@@ -1,10 +1,14 @@
-name: Test-ItemVelocity
+name: Test-Maps
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Bukkit PRs
+description : A plugin to unit test Maps in 1.13
+api-version: 1.13
 commands:
-  setvelocity:
-    description: Set velocity for testing item disappearance
-    usage: setvelocity <y velocity>
+  givemap:
+    description: Give yourself a new map
+    usage: givemap
+  createmap:
+    description: Create a map without giving the item
+    usage: createmap

@@ -1,48 +1,32 @@
 package com.elmakers.mine.bukkit.plugins.test;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Particle;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
+import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.map.MapView;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
-
-import java.util.List;
 
 public class UnitTestPlugin extends JavaPlugin implements Listener
 {
     private static final ChatColor CHAT_PREFIX = ChatColor.AQUA;
     private static final ChatColor ERROR_PREFIX = ChatColor.RED;
 
-    private Vector upVector = new Vector(0.0, 0.1, 0.0);
-
     public void onEnable()
 	{
-        getCommand("setvelocity").setExecutor(this);
+        getCommand("givemap").setExecutor(this);
+        getCommand("createmap").setExecutor(this);
 
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(this, this);
-		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                 for (Player player : getServer().getOnlinePlayers()) {
-                     List<Entity> allNearby = player.getNearbyEntities(10, 10, 10);
-                     for (Entity nearby : allNearby) {
-                         if (nearby instanceof Item) {
-                             nearby.getWorld().spawnParticle(Particle.SPELL_MOB, nearby.getLocation(), 10);
-                             nearby.setVelocity(upVector);
-                         }
-                     }
-                 }
-            }
-        }, 200, 40);
 	}
 
 	public void onDisable()
@@ -51,25 +35,37 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        sendMessage(event.getPlayer(), "Use /setvelocity <velocity> to change y velocity");
+        sendMessage(event.getPlayer(), "Use /givemap and /createmap to test map ids");
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length < 1) {
-            sendError(sender,"Usage: setvelocity <velocity>");
-            return true;
+        if (command.getName().equals("createmap")) {
+            MapView newMap = Bukkit.createMap(Bukkit.getWorlds().get(0));
+            sendMessage(sender, "Created map id " + newMap.getId());
+            sendMessage(sender, "Now please use /save-all and check world/data to see if the data file is there (it won't be on 1.13)");
         }
-        double velocity;
-        try {
-            velocity = Double.parseDouble(args[0]);
-        } catch (Exception ex) {
-            sendError(sender,"Velocity expected to be a single number");
-            return true;
-        }
-        upVector = new Vector(0, velocity, 0);
+        if (command.getName().equals("givemap")) {
+            if (!(sender instanceof Player)) {
+                sendError(sender, "You will need to use this one in-game");
+                return true;
+            }
+            Player player = (Player)sender;
+            MapView newMap = Bukkit.createMap(Bukkit.getWorlds().get(0));
+            sendMessage(sender, "Created map id " + newMap.getId());
 
-        sendMessage(sender, "Y-Velocity set to " + velocity);
+            ItemStack newMapItem = new ItemStack(Material.FILLED_MAP);
+
+            // Yeah this is hacky, replace with MapMeta.setId when available.
+            net.minecraft.server.v1_13_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(newMapItem);
+            nmsStack.getOrCreateTag().setInt("map", newMap.getId());
+            CraftItemStack craftStack = CraftItemStack.asCraftMirror(nmsStack);
+
+            player.getInventory().addItem(craftStack);
+
+            sendMessage(sender, "Now please use /save-all and check world/data to see if the data file is there (it should be)");
+        }
         return true;
     }
 
