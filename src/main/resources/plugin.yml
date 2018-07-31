@@ -1,13 +1,10 @@
-name: Test-Maps
+name: Test-AOECloud
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Maps in 1.12
+description : A plugin to test AOE cloud spawning
 commands:
-  givemap:
-    description: Give yourself a new map
-    usage: givemap
-  createmap:
-    description: Create a map without giving the item
-    usage: createmap
+  cloud:
+    description: Spawn an AOE cloud with redstone particles
+    usage: cloud
