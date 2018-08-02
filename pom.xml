@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.elmakers.mine.bukkit.plugins</groupId>
-	<artifactId>Test-SPIGOT-4220</artifactId>
+	<artifactId>Test-SPIGOT-4212</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<name>Plugin For Unit Testing Bukkit PRs</name>
 	<url>http://mine.elmakers.com</url>
