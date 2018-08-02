@@ -1,6 +1,7 @@
-name: Test-ItemMetaData
+name: Test-SPIGOT-4220
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
+api-version: 1.13
 website: http://mine.elmakers.com
 author: NathanWolf
 description : A plugin to unit test Bukkit PRs
