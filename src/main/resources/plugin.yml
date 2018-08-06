@@ -1,24 +1,17 @@
-name: Test-ItemMetaData
+name: SPIGOT-4234-Test
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
+api-version: 1.13
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Bukkit PRs
+description : A plugin to unit test the PlayerSteerVehicleEvent
 commands:
-  launch:
-    description: Launch a projectile
-    usage: launch [type]
-    permission: launch
-  bow:
-    description: Get a bow and 64 arrows
-    usage: bow
-    permission: bow
+  broom:
+    description: Mount a flying broomstick
+    usage: broom
+    permission: broom
 permissions:
-  launch:
-    description: Player may launch projectiles
-    type: boolean
-    default: true
-  bow:
-    description: Player may get a bow and arrows
+  broom:
+    description: Player may fly on a broomstick
     type: boolean
     default: true

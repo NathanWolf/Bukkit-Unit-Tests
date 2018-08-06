@@ -1,87 +1,80 @@
 package com.elmakers.mine.bukkit.plugins.test;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerSteerVehicleEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.Consumer;
 import org.bukkit.util.Vector;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.logging.Level;
-
-public class UnitTestPlugin extends JavaPlugin implements Listener
-{
-    private static final NumberFormat[] formatters = {
-        new DecimalFormat("#0"),
-        new DecimalFormat("#0.0"),
-        new DecimalFormat("#0.00"),
-        new DecimalFormat("#0.000")
-    };
+public class UnitTestPlugin extends JavaPlugin implements Listener {
+    private final Collection<Entity> cleanupEntities = new ArrayList<Entity>();
 
     @Override
-    public void onEnable()
-	{
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(this, this);
-	}
+    public void onEnable() {
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(this, this);
+        Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+            @Override
+            public void run() {
+                Iterator<Entity> it = cleanupEntities.iterator();
+                while (it.hasNext()) {
+                    Entity entity = it.next();
+                    if (entity.getPassengers().size() == 0) {
+                        entity.remove();
+                        it.remove();
+                    }
+                }
+            }
+        }, 10, 20);
+    }
 
-	@Override
-	public void onDisable()
-    {
+    @Override
+    public void onDisable() {
 
     }
+
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event)
-    {
-        event.getPlayer().sendMessage(ChatColor.GREEN + "Use " + ChatColor.WHITE + "/bow"
-        + ChatColor.GREEN + " to get a bow and arrows");
-        event.getPlayer().sendMessage(ChatColor.GREEN + "Use " + ChatColor.WHITE + "/launch <projectile>"
-        + ChatColor.GREEN + " to use the launchProjectile API");
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.getPlayer().sendMessage(ChatColor.GREEN + "Use " + ChatColor.WHITE + "/broom"
+                + ChatColor.GREEN + " to mount a flying broom");
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equals("launch")) {
+        if (command.getName().equals("broom")) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "This command may only be used from in-game");
                 return true;
             }
 
-            Player player = (Player)sender;
-            if (args.length < 1) {
-                sender.sendMessage(ChatColor.RED + "Usage: " + ChatColor.WHITE + "/launch <projectile>");
-                return true;
-            }
-            try {
-                Class<? extends Projectile> projectileClass = (Class<? extends Projectile>)Class.forName("org.bukkit.entity." + args[0]);
-                player.launchProjectile(projectileClass);
-            } catch (Exception ex) {
-                player.sendMessage(ChatColor.RED + "Invalid projectile type: " + ChatColor.WHITE + args[0]);
-                player.sendMessage("  Try: TippedArrow, LargeFireball, SmallFireball, WitherSkull");
-                getLogger().log(Level.WARNING, "Error launching projectile", ex);
-            }
-
-            return true;
-        } else if (command.getName().equals("bow")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "This command may only be used from in-game");
-                return true;
-            }
-
-            Player player = (Player)sender;
-            player.getInventory().addItem(new ItemStack(Material.BOW));
-            player.getInventory().addItem(new ItemStack(Material.ARROW, 64));
+            Player player = (Player) sender;
+            ArmorStand armorStand = player.getWorld().spawn(player.getLocation(), ArmorStand.class, new Consumer<ArmorStand>() {
+                @Override
+                public void accept(ArmorStand armorStand) {
+                    armorStand.setVisible(false);
+                    armorStand.setHelmet(new ItemStack(Material.WOODEN_SHOVEL));
+                    armorStand.setPersistent(false);
+                }
+            });
+            armorStand.addPassenger(player);
+            armorStand.setVelocity(new Vector(0, 2, 0));
+            cleanupEntities.add(armorStand);
 
             return true;
         }
@@ -89,31 +82,46 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
     }
 
     @EventHandler
-    public void onProjectileHit(ProjectileHitEvent event) {
-        Projectile projectile = event.getEntity();
-        ProjectileSource source = projectile.getShooter();
-        if (!(source instanceof Player)) return;
+    public void onVehicleSteer(PlayerSteerVehicleEvent event) {
+        Player player = event.getPlayer();
+        Entity vehicle = player.getVehicle();
+        if (vehicle == null || !(vehicle instanceof ArmorStand)) return;
 
-        Player player = (Player)source;
-        player.sendMessage(ChatColor.AQUA + "Projectile (" + ChatColor.DARK_AQUA +
-            projectile.getType() + ChatColor.AQUA + ")");
-        player.sendMessage(ChatColor.AQUA + "shot from   " +
-            printVector(player.getLocation().getDirection()));
-        player.sendMessage(ChatColor.AQUA + " hit facing " +
-            printVector(projectile.getLocation().getDirection()));
-        player.sendMessage(ChatColor.AQUA + " at speed   " +
-            printVector(projectile.getVelocity().normalize()));
+        Vector direction = event.getDirection();
+        direction = rotateVector(direction, player.getLocation().getYaw(), player.getLocation().getPitch());
+        getLogger().info("Direction: " + direction + " / " + event.isJumping());
+        if (event.isJumping()) {
+            direction.setY(1);
+        }
+
+        vehicle.setVelocity(direction);
     }
 
+    // Convert a relative vector to world coordinates
+    public static final Vector rotateVector(Vector v, double yawDegrees, double pitchDegrees) {
+        double yaw = Math.toRadians(-yawDegrees);
+        double pitch = Math.toRadians(-pitchDegrees);
 
-    public static String printVector(Vector vector) {
-        return printVector(vector, 3);
-    }
+        double cosYaw = Math.cos(yaw);
+        double cosPitch = Math.cos(pitch);
+        double sinYaw = Math.sin(yaw);
+        double sinPitch = Math.sin(pitch);
 
-    public static String printVector(Vector vector, int digits) {
-        NumberFormat formatter = formatters[Math.min(Math.max(0, digits), formatters.length - 1)];
-        return "" + ChatColor.BLUE + formatter.format(vector.getX()) + ChatColor.GRAY + "," +
-            ChatColor.BLUE + formatter.format(vector.getY()) + ChatColor.GRAY + "," +
-            ChatColor.BLUE + formatter.format(vector.getZ());
+        double initialX, initialY, initialZ;
+        double x, y, z;
+
+        // Y Axis rotation (Pitch)
+        initialX = v.getX();
+        initialY = v.getY();
+        x = initialX * cosPitch - initialY * sinPitch;
+        y = initialX * sinPitch + initialY * cosPitch;
+
+        // X/Z Axis rotation (Yaw)
+        initialZ = v.getZ();
+        initialX = x;
+        z = initialZ * cosYaw - initialX * sinYaw;
+        x = initialZ * sinYaw + initialX * cosYaw;
+
+        return new Vector(x, y, z);
     }
 }
