@@ -87,14 +87,14 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
         Entity vehicle = player.getVehicle();
         if (vehicle == null || !(vehicle instanceof ArmorStand)) return;
 
-        Vector direction = new Vector(event.getStrafeMovement(), 0, event.getForwardMovement());
+        Vector direction = new Vector(-event.getStrafeMovement(), 0, event.getForwardMovement());
         Vector translated = rotateVector(direction, player.getLocation().getYaw(), player.getLocation().getPitch());
         getLogger().info("Direction: " + direction + " translated to " + translated + " from " + player.getLocation().getYaw());
         if (event.isJumping()) {
-            direction.setY(1);
+            translated.setY(1);
         }
 
-        vehicle.setVelocity(direction);
+        vehicle.setVelocity(translated);
     }
 
     // Convert a relative vector to world coordinates
