@@ -87,7 +87,7 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
         Entity vehicle = player.getVehicle();
         if (vehicle == null || !(vehicle instanceof ArmorStand)) return;
 
-        Vector direction = event.getDirection();
+        Vector direction = new Vector(event.getStrafeMovement(), 0, event.getForwardMovement());
         direction = rotateVector(direction, player.getLocation().getYaw(), player.getLocation().getPitch());
         getLogger().info("Direction: " + direction + " / " + event.isJumping());
         if (event.isJumping()) {
