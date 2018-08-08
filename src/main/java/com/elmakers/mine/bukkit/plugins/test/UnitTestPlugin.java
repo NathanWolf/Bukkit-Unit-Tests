@@ -88,8 +88,8 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
         if (vehicle == null || !(vehicle instanceof ArmorStand)) return;
 
         Vector direction = new Vector(event.getStrafeMovement(), 0, event.getForwardMovement());
-        direction = rotateVector(direction, player.getLocation().getYaw(), player.getLocation().getPitch());
-        getLogger().info("Direction: " + direction + " / " + event.isJumping());
+        Vector translated = rotateVector(direction, player.getLocation().getYaw(), player.getLocation().getPitch());
+        getLogger().info("Direction: " + direction + " translated to " + translated + " from " + player.getLocation().getYaw());
         if (event.isJumping()) {
             direction.setY(1);
         }
