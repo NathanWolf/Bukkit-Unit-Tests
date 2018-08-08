@@ -99,7 +99,7 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
 
     // Convert a relative vector to world coordinates
     public static final Vector rotateVector(Vector v, double yawDegrees, double pitchDegrees) {
-        double yaw = Math.toRadians(-yawDegrees);
+        double yaw = Math.toRadians(yawDegrees);
         double pitch = Math.toRadians(-pitchDegrees);
 
         double cosYaw = Math.cos(yaw);
@@ -107,20 +107,17 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
         double sinYaw = Math.sin(yaw);
         double sinPitch = Math.sin(pitch);
 
-        double initialX, initialY, initialZ;
         double x, y, z;
 
-        // Y Axis rotation (Pitch)
-        initialX = v.getX();
-        initialY = v.getY();
+        double initialX = v.getX();
+        double initialY = v.getY();
+        double initialZ = v.getZ();
         x = initialX * cosPitch - initialY * sinPitch;
         y = initialX * sinPitch + initialY * cosPitch;
 
-        // X/Z Axis rotation (Yaw)
-        initialZ = v.getZ();
         initialX = x;
-        z = initialZ * cosYaw - initialX * sinYaw;
-        x = initialZ * sinYaw + initialX * cosYaw;
+        z = initialZ * cosYaw + initialX * sinYaw;
+        x = initialX * cosYaw - initialZ * sinYaw;
 
         return new Vector(x, y, z);
     }
