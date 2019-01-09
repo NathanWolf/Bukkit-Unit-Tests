@@ -87,9 +87,10 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
         Entity vehicle = player.getVehicle();
         if (vehicle == null || !(vehicle instanceof ArmorStand)) return;
 
-        Vector direction = new Vector(-event.getStrafeMovement(), 0, event.getForwardMovement());
+        // Negate strafe movement since our rotateVector method expects that left = -1
+        Vector direction = new Vector(event.getForwardMovement(), 0, -event.getStrafeMovement());
         Vector translated = rotateVector(direction, player.getLocation().getYaw(), player.getLocation().getPitch());
-        getLogger().info("Direction: " + direction + " translated to " + translated + " from " + player.getLocation().getYaw());
+        // getLogger().info("Direction: " + direction + " translated to " + translated + " from " + player.getLocation().getYaw());
         if (event.isJumping()) {
             translated.setY(1);
         }
@@ -98,8 +99,8 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
     }
 
     // Convert a relative vector to world coordinates
-    public static final Vector rotateVector(Vector v, double yawDegrees, double pitchDegrees) {
-        double yaw = Math.toRadians(yawDegrees);
+    public static final Vector rotateVector(Vector v, float yawDegrees, float pitchDegrees) {
+        double yaw = Math.toRadians(-1 * (yawDegrees + 90));
         double pitch = Math.toRadians(-pitchDegrees);
 
         double cosYaw = Math.cos(yaw);
@@ -107,17 +108,20 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
         double sinYaw = Math.sin(yaw);
         double sinPitch = Math.sin(pitch);
 
+        double initialX, initialY, initialZ;
         double x, y, z;
 
-        double initialX = v.getX();
-        double initialY = v.getY();
-        double initialZ = v.getZ();
+        // Z_Axis rotation (Pitch)
+        initialX = v.getX();
+        initialY = v.getY();
         x = initialX * cosPitch - initialY * sinPitch;
         y = initialX * sinPitch + initialY * cosPitch;
 
+        // Y_Axis rotation (Yaw)
+        initialZ = v.getZ();
         initialX = x;
-        z = initialZ * cosYaw + initialX * sinYaw;
-        x = initialX * cosYaw - initialZ * sinYaw;
+        z = initialZ * cosYaw - initialX * sinYaw;
+        x = initialZ * sinYaw + initialX * cosYaw;
 
         return new Vector(x, y, z);
     }
