@@ -1,8 +1,12 @@
 package com.elmakers.mine.bukkit.plugins.test;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +23,18 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
 
 	public void onDisable()
     {
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (event.getItemDrop().getItemStack().getType() == Material.DIAMOND_PICKAXE) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.getPlayer().sendMessage(ChatColor.RED + "Diamond picks can not be dropped");
     }
 
     protected void sendMessage(CommandSender sender, String string)
