@@ -75,6 +75,7 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
             armorStand.addPassenger(player);
             armorStand.setVelocity(new Vector(0, 2, 0));
             cleanupEntities.add(armorStand);
+            player.sendMessage(ChatColor.AQUA + "WASD + Space to move");
 
             return true;
         }
@@ -87,42 +88,38 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
         Entity vehicle = player.getVehicle();
         if (vehicle == null || !(vehicle instanceof ArmorStand)) return;
 
-        // Negate strafe movement since our rotateVector method expects that left = -1
-        Vector direction = new Vector(event.getForwardMovement(), 0, -event.getStrafeMovement());
-        Vector translated = rotateVector(direction, player.getLocation().getYaw(), player.getLocation().getPitch());
-        // getLogger().info("Direction: " + direction + " translated to " + translated + " from " + player.getLocation().getYaw());
-        if (event.isJumping()) {
-            translated.setY(1);
+        Vector playerDirection = player.getLocation().getDirection();
+        Vector moveDirection = new Vector();
+
+        // Use look direction for forward/backward movement
+        if (event.getForwardMovement() < 0) {
+            moveDirection = playerDirection.clone().multiply(-1);
+        } else if (event.getForwardMovement() > 0) {
+            moveDirection = playerDirection.clone();
         }
 
-        vehicle.setVelocity(translated);
-    }
+        // Add in left or right hand movement if strafing
+        Vector strafeDirection = playerDirection.clone();
+        strafeDirection.setY(0);
+        if (event.getStrafeMovement() < 0) {
+            // Negative strafe movement means to the right
+            double strafeZ = strafeDirection.getZ();
+            strafeDirection.setZ(strafeDirection.getX());
+            strafeDirection.setX(-strafeZ);
+            moveDirection.add(strafeDirection);
 
-    // Convert a relative vector to world coordinates
-    public static final Vector rotateVector(Vector v, float yawDegrees, float pitchDegrees) {
-        double yaw = Math.toRadians(-1 * (yawDegrees + 90));
-        double pitch = Math.toRadians(-pitchDegrees);
+        } else if (event.getStrafeMovement() > 0) {
+            // Positive strafe movement means to the right
+            double strafeZ = strafeDirection.getZ();
+            strafeDirection.setZ(-strafeDirection.getX());
+            strafeDirection.setX(strafeZ);
+            moveDirection.add(strafeDirection);
+        }
 
-        double cosYaw = Math.cos(yaw);
-        double cosPitch = Math.cos(pitch);
-        double sinYaw = Math.sin(yaw);
-        double sinPitch = Math.sin(pitch);
+        if (event.isJumping()) {
+            moveDirection.setY(1);
+        }
 
-        double initialX, initialY, initialZ;
-        double x, y, z;
-
-        // Z_Axis rotation (Pitch)
-        initialX = v.getX();
-        initialY = v.getY();
-        x = initialX * cosPitch - initialY * sinPitch;
-        y = initialX * sinPitch + initialY * cosPitch;
-
-        // Y_Axis rotation (Yaw)
-        initialZ = v.getZ();
-        initialX = x;
-        z = initialZ * cosYaw - initialX * sinYaw;
-        x = initialZ * sinYaw + initialX * cosYaw;
-
-        return new Vector(x, y, z);
+        vehicle.setVelocity(moveDirection);
     }
 }

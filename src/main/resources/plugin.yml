@@ -1,7 +1,7 @@
 name: SPIGOT-4234-Test
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
-api-version: 1.13
+api-version: 1.15
 website: http://mine.elmakers.com
 author: NathanWolf
 description : A plugin to unit test the PlayerSteerVehicleEvent
