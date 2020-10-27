@@ -1,4 +1,4 @@
-name: Test-ItemMetaData
+name: NoAPIVersion
 main: com.elmakers.mine.bukkit.plugins.test.noapiversion.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
