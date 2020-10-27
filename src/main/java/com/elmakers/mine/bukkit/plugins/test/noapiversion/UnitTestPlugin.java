@@ -1,4 +1,4 @@
-package com.elmakers.mine.bukkit.plugins.test;
+package com.elmakers.mine.bukkit.plugins.test.noapiversion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +27,13 @@ public class UnitTestPlugin extends JavaPlugin implements Listener
 
         // Register a crafting recipe that lets us turn leather
         // armor into diamond armor
-        NamespacedKey recipeKey = new NamespacedKey(this, "irondiamondhelmet");
-        ShapedRecipe shapedRecipe = new ShapedRecipe(recipeKey, new ItemStack(Material.DIAMOND_HELMET));
+        NamespacedKey recipeKey = new NamespacedKey(this, "leatherdiamondboots");
+        ShapedRecipe shapedRecipe = new ShapedRecipe(recipeKey, new ItemStack(Material.DIAMOND_BOOTS));
         shapedRecipe.shape("o", "i");
         shapedRecipe.setIngredient('o', Material.DIAMOND);
         List<ItemStack> variants = new ArrayList<>();
-        for (short damage = 0; damage < Material.LEATHER_HELMET.getMaxDurability(); damage++) {
-            ItemStack variant = new ItemStack(Material.LEATHER_HELMET, 1, damage);
+        for (short damage = 0; damage < Material.LEATHER_BOOTS.getMaxDurability(); damage++) {
+            ItemStack variant = new ItemStack(Material.LEATHER_BOOTS, 1, damage);
             variants.add(variant);
         }
         RecipeChoice.ExactChoice choice = new RecipeChoice.ExactChoice(variants);
