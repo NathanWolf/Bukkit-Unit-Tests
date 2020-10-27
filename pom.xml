@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.elmakers.mine.bukkit.plugins</groupId>
-	<artifactId>Bukkit-Unit-Test</artifactId>
+	<artifactId>MultiExactCrafting</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<name>Plugin For Unit Testing Bukkit PRs</name>
+	<name>Multi-ExactChoice Crafting</name>
 	<url>http://mine.elmakers.com</url>
 
     <properties>

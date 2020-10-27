@@ -1,4 +1,4 @@
-package com.elmakers.mine.bukkit.plugins.test;
+package com.elmakers.mine.bukkit.plugins.test.crafting;
 
 import java.util.ArrayList;
 import java.util.List;

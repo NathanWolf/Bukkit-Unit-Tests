@@ -1,7 +1,7 @@
-name: Test-ItemMetaData
-main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
+name: MultiExactCrafting
+main: com.elmakers.mine.bukkit.plugins.test.crafting.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Bukkit PRs
+description : A plugin to test multi-exact crafting
 api-version: 1.16
