@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.elmakers.mine.bukkit.plugins</groupId>
-	<artifactId>Bukkit-Unit-Test</artifactId>
+	<artifactId>Magic-API-Events</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<name>Plugin For Unit Testing Bukkit PRs</name>
+	<name>Plugin For Testing Magic API</name>
 	<url>http://mine.elmakers.com</url>
 
     <properties>
@@ -12,6 +12,12 @@
     </properties>
 
 	<dependencies>
+        <dependency>
+            <groupId>com.elmakers.mine.bukkit</groupId>
+            <artifactId>MagicAPI</artifactId>
+            <version>8.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
@@ -20,10 +26,10 @@
 		</dependency>
 	</dependencies>
 	<repositories>
-       		<repository>
-            		<id>bukkit-repo</id>
-            		<url>http://repo.bukkit.org/content/groups/public/</url>
-      		</repository>
+        <repository>
+            <id>elMakers</id>
+            <url>http://maven.elmakers.com/repository/</url>
+        </repository>
 	</repositories>
 	<build>
 		<plugins>
