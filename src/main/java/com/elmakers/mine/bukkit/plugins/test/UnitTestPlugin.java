@@ -25,15 +25,12 @@ public class UnitTestPlugin extends JavaPlugin implements Listener {
     @EventHandler
     @SuppressWarnings("deprecation")
     public void onPlayerJoin(PlayerJoinEvent event) {
-        sendMessage(event.getPlayer(), "Craft some sticks!");
+        sendMessage(event.getPlayer(), "Craft some sticks! They should glitch out.");
         event.getPlayer().getInventory().addItem(new ItemStack(Material.BIRCH_PLANKS, 32));
     }
 
     @EventHandler
     public void onCraftItem(CraftItemEvent event) {
-        for (HumanEntity entity : event.getInventory().getViewers()) {
-            entity.sendMessage("Setting custom name");
-        }
         ItemStack item = event.getCurrentItem();
 
         // This is the culprit here.
