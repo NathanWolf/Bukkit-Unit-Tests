@@ -1,51 +1,50 @@
 package com.elmakers.mine.bukkit.plugins.test;
 
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.elmakers.mine.bukkit.api.event.PreLoadEvent;
-import com.elmakers.mine.bukkit.api.magic.MagicAPI;
-import com.elmakers.mine.bukkit.api.protection.BlockBreakManager;
-
-public class UnitTestPlugin extends JavaPlugin implements Listener, BlockBreakManager
-{
+public class UnitTestPlugin extends JavaPlugin implements Listener {
     private static final ChatColor CHAT_PREFIX = ChatColor.AQUA;
     private static final ChatColor ERROR_PREFIX = ChatColor.RED;
 
-    public void onEnable()
-	{
-		PluginManager pm = getServer().getPluginManager();
-		MagicAPI api = (MagicAPI)pm.getPlugin("Magic");
-        api.getController().register(this);
-		getLogger().info("Registered no-break handler");
-	}
+    public void onEnable() {
+        getServer().getPluginManager().registerEvents(this, this);
+    }
 
-	public void onDisable()
-    {
+    public void onDisable() {
     }
 
     @EventHandler
-    public void onMagicPreLoad(PreLoadEvent event) {
+    @SuppressWarnings("deprecation")
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        sendMessage(event.getPlayer(), "Craft some sticks!");
+        event.getPlayer().getInventory().addItem(new ItemStack(Material.BIRCH_PLANKS, 32));
     }
 
-    protected void sendMessage(CommandSender sender, String string)
-    {
+    @EventHandler
+    public void onCraftItem(CraftItemEvent event) {
+        for (HumanEntity entity : event.getInventory().getViewers()) {
+            entity.sendMessage("Setting custom name");
+        }
+        ItemStack item = event.getCurrentItem();
+
+        // This is the culprit here.
+        item.setDurability(item.getDurability());
+    }
+
+    protected void sendMessage(CommandSender sender, String string) {
         sender.sendMessage(CHAT_PREFIX + string);
     }
 
-    protected void sendError(CommandSender sender, String string)
-    {
+    protected void sendError(CommandSender sender, String string) {
         sender.sendMessage(ERROR_PREFIX + string);
-    }
-
-    @Override
-    public boolean hasBreakPermission(Player player, Block block) {
-        return false;
     }
 }

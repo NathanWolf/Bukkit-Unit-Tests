@@ -1,9 +1,7 @@
-name: MagicAPI-Test
+name: Crafting-Test
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to unit test Bukkit PRs
+description : A plugin to unit test custom crafting
 commands:
-depend:
-  - Magic
