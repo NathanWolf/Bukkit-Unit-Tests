@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.elmakers.mine.bukkit.plugins</groupId>
-	<artifactId>Bukkit-Unit-Test</artifactId>
+	<artifactId>Magic-Damager</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<name>Plugin For Unit Testing Bukkit PRs</name>
+	<name>Plugin For Testing Magic Damage Tracking</name>
 	<url>http://mine.elmakers.com</url>
 
     <properties>
@@ -13,16 +13,16 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.7.9-R0.2-SNAPSHOT</version>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.16.1-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.elmakers.mine.bukkit</groupId>
 			<artifactId>MagicAPI</artifactId>
-			<version>7.0-SNAPSHOT</version>
+			<version>8.0-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>
