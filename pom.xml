@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.elmakers.mine.bukkit.plugins</groupId>
-	<artifactId>Magic-Damager</artifactId>
+	<artifactId>LockableTest</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<name>Plugin For Testing Magic Damage Tracking</name>
+	<name>Plugin For Testing Lockable containers</name>
 	<url>http://mine.elmakers.com</url>
 
     <properties>
@@ -19,23 +19,12 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.elmakers.mine.bukkit</groupId>
-			<artifactId>MagicAPI</artifactId>
-			<version>8.0-SNAPSHOT</version>
-		</dependency>
-
 	</dependencies>
 	<repositories>
        		<repository>
             		<id>bukkit-repo</id>
             		<url>http://repo.bukkit.org/content/groups/public/</url>
       		</repository>
-
-			<repository>
-				<id>elMakers</id>
-				<url>http://maven.elmakers.com/repository/</url>
-			</repository>
 
 	</repositories>
 	<build>

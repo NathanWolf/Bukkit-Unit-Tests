@@ -1,8 +1,11 @@
-name: Magic-Damager
-main: com.elmakers.mine.bukkit.plugins.test.MagicDamagerPlugin
+name: Lockable
+main: com.elmakers.mine.bukkit.plugins.test.LockablePlugin
 version: 1.0
+api-version: 1.16
 website: http://mine.elmakers.com
 author: NathanWolf
-description : A plugin to test Magic damage tracking
-depends: Magic
+description : A plugin to test Lockable containers
 commands:
+  lock:
+    description: Lock a container and get a key
+    usage: lock
