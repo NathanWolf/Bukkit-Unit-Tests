@@ -27,7 +27,14 @@ public class TestProvider implements AttributeProvider {
 
     @Override
     public Double getAttributeValue(String attribute, Player player) {
-        plugin.getLogger().info("Requesting attribute: " + attribute);
-        return 20.0;
+        switch(attribute) {
+            case "intelligence":
+                return 20.0;
+            case "strength":
+                return 10.0;
+            case "power":
+                return 5.0;
+        }
+        return null;
     }
 }
