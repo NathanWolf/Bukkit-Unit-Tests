@@ -1,7 +1,7 @@
-name: Test-ItemMetaData
+name: UnitTest
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
-website: http://mine.elmakers.com
+api-version: 1.14
 author: NathanWolf
-description : A plugin to unit test Bukkit PRs
+description: A plugin to unit test Spigot PRs and Issues
 commands:
