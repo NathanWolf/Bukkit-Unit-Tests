@@ -16,6 +16,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,10 +24,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class UnitTestPlugin extends JavaPlugin implements Listener, TabExecutor {
 
     private Map<EntityType, Integer> loadedEntities = new HashMap<>();
+    private Map<EntityType, Integer> spawnedEntities = new HashMap<>();
     private int chunkLoads = 0;
     private int emptyChunkLoads = 0;
     private int persistentEntityLoads = 0;
     private int entityLoads = 0;
+    private int persistentEntitySpawns = 0;
+    private int entitySpawns = 0;
 
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
@@ -113,6 +117,11 @@ public class UnitTestPlugin extends JavaPlugin implements Listener, TabExecutor 
                 trackEntity(entity);
             }
         }
+    }
+
+    @EventHandler
+    public void onEntitySpawn(EntitySpawnEvent event) {
+
     }
 
     private void trackEntity(Entity entity) {
