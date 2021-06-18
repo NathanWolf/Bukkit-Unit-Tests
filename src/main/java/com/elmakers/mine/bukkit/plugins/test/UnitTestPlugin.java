@@ -6,7 +6,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +22,12 @@ public class UnitTestPlugin extends JavaPlugin implements Listener, TabExecutor 
     }
 
     public void onDisable() {
+    }
+
+    @EventHandler
+    public void onSlimeSplit(SlimeSplitEvent event) {
+        getLogger().info("Cancelling slime event, prepare for server crash!");
+        event.setCancelled(true);
     }
 
     @Override

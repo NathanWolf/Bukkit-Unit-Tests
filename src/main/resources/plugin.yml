@@ -1,7 +1,7 @@
-name: UnitTest
+name: SPIGOT-6580
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 api-version: 1.14
 author: NathanWolf
-description: A plugin to unit test Spigot PRs and Issues
+description: A plugin to unit test SPIGOT-6580
 commands:
