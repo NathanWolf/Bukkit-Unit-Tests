@@ -1,7 +1,23 @@
-name: UnitTest
+name: EndPortalTP
 main: com.elmakers.mine.bukkit.plugins.test.UnitTestPlugin
 version: 1.0
 api-version: 1.14
 author: NathanWolf
 description: A plugin to unit test Spigot PRs and Issues
 commands:
+  newworld:
+    description: Create a new world and teleport to it
+    permission: test.commands.newworld
+  makeportal:
+    description: Create an end portal in front of you
+    permission: test.commands.makeportal
+  setportal:
+    description: Change portal behavior
+    permission: test.commands.setportal
+permissions:
+  test.commands.newworld:
+    default: op
+  test.comands.endportal:
+    default: op
+  test.comands.setportal:
+    default: op
