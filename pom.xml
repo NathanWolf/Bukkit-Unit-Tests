@@ -7,7 +7,7 @@
     <name>Spigot Unit test</name>
 
     <properties>
-        <bukkit.version>1.17-R0.1-SNAPSHOT</bukkit.version>
+        <bukkit.version>1.20.5-R0.1-SNAPSHOT</bukkit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -33,8 +33,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>21</source>
+                    <target>21</target>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
